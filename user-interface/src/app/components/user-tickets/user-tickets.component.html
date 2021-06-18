@@ -1,0 +1,65 @@
+<div>
+    <div *ngIf="(loadingState$ | async) === 'success'" [@enterAnimation]>
+      <div class="container">
+        <div>
+          <ng-container *ngIf="(tickets$ | async); let tickets">
+            <ng-container *ngIf="tickets.length > 0">
+              <div class="row">
+                <div class="card-columns">
+                  <ng-container *ngFor="let ticket of tickets">
+                    <div class="card">
+                      <ng-container *ngIf="ticket.winnings != '0'">
+                        <div class="ribbon-wrapper">
+                          <div class="ribbon"></div>
+                        </div>
+                      </ng-container>
+                      <div class="card-body">
+                        <h5 class="card-title">Ticket #{{ticket.ticketId}}</h5>
+                        <p class="card-text" [ngClass]="{ 'ticket-winner': ticket.winnings != '0' }">
+                          ONE {{formatAmountFromWei(ticket.winnings)}}
+                        </p>
+                        <button class="Button claim-button" *ngIf="ticket.winnings != '0'" (click)="claimFunds$.next(ticket.ticketId)">
+                          Claim
+                        </button>
+                        <button class="Button Button--secondary" (click)="transfer(ticket.ticketId)">
+                          Transfer
+                        </button>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="tickets.length === 0">
+              <div class="col">
+                <div class="synth-spinner">
+                  <div class="error-loading">
+                    <ng-container *ngIf="(userAddress$ | async)">
+                      There were no tickets found for your account.
+                    </ng-container>
+                    <ng-container *ngIf="!(userAddress$ | async)">
+                      Please login and refresh to view your tickets.
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+    </div>
+    </div>
+    <div *ngIf="(loadingState$ | async) === 'pending'">
+        <div class="synth-spinner">
+            <div class="spinner-border text-dark" role="status" style="width: 3rem; height: 3rem; z-index: 20;">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="(loadingState$ | async) === 'error'">
+      <div class="synth-spinner">
+        <div class="error-loading">
+          There was an error while loading your tickets. Please try again.
+        </div>
+      </div>
+    </div>
+</div>

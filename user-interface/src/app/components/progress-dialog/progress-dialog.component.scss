@@ -1,0 +1,39 @@
+@import '../../../variables.scss';
+
+.synth-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.approve-header {
+    background: $primary-dark;
+    color: #ffffff;
+    margin: -24px;
+    margin-bottom: 20px;
+    padding: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+
+p {
+    font-size: 14px;
+}
+
+.form-entry {
+    text-align: center;
+}
+
+.button-approve {
+    margin-top: 10px;
+}
+
+.loader-wrapper {
+    text-align: center;
+}
+
+.pending-message {
+    margin-bottom: 10px;
+    text-align: center;
+}
+

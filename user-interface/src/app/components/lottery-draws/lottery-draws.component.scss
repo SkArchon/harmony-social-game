@@ -1,0 +1,28 @@
+@import '../../../variables.scss';
+
+.Draw-Entry {
+    padding: 10px;
+    background: $header-color;
+    margin-bottom: 15px;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+}
+
+.synth-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 150px);
+}
+
+.header-text {
+    font-size: 12px;
+    color: rgb(204, 204, 204);
+}
+
+.draw-amount {
+    color: $primary-color;
+}

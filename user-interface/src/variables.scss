@@ -1,0 +1,38 @@
+$electric-blue: #00AEE9;
+$midnight-blue: #1B295E;
+$cool-gray: #758796;
+$mint-green: #69FABD;
+
+$primary-gray: $cool-gray;
+
+$header-color: $electric-blue;
+$header-color-light-20: lighten($header-color, 20%);
+
+$price-summary-background: #209efb;
+$price-summary-color: #ffffff;
+
+$primary-color: #00e5cc;
+$primary-color-light-20: lighten($primary-color, 20%);
+$red-color: #0c090a;
+
+
+
+$primary-dark: $midnight-blue;
+$primary-dark-light-10: #163b72;
+$primary-dark-light-8: lighten($primary-dark, 5%);
+$widget-border-radius: 5px;
+$widget-box-shadow: 0px 7px 56px 6px rgba(63, 59, 74, 0.15);
+$widget-padding: 30px;
+$widget-sub-padding: 20px;
+$button-color: #ffc149;
+
+
+
+$top-header-width: 60%;
+$top-header-width-medium: 80%;
+$top-header-width-extra-large: 50%;
+
+$error-color: rgb(255, 93, 93);
+$success-color: #69e8bd;
+
+

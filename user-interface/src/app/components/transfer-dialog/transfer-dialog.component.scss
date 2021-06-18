@@ -1,0 +1,43 @@
+@import '../../../variables.scss';
+
+.synth-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.approve-header {
+    background: $primary-dark;
+    color: #ffffff;
+    margin: -24px;
+    margin-bottom: 20px;
+    padding: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+
+.error-reason {
+    color: $error-color;
+    font-size: 14px;
+}
+
+p {
+    font-size: 14px;
+}
+
+.form-entry {
+    text-align: center;
+}
+
+.button-approve {
+    margin-top: 10px;
+}
+
+.target-address {
+    width: 50%;
+}
+
+.loader-wrapper {
+    text-align: center;
+}

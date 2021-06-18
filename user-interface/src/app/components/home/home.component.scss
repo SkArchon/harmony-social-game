@@ -1,0 +1,411 @@
+@import '../../../variables.scss';
+
+%Widget {
+    box-shadow: $widget-box-shadow;
+    padding: $widget-padding;
+    position: relative;
+    border-radius: $widget-border-radius;
+    margin: 0 auto 40px auto;
+    color: #000000;
+}
+
+%Base-Widget {
+    @extend %Widget;
+    padding: $widget-sub-padding;
+    color: #ffffff;
+}
+
+%Base-Widget__header {
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 1px;
+    padding: 10px 0px 10px $widget-sub-padding;
+    margin: (-$widget-sub-padding) (-$widget-sub-padding) $widget-sub-padding (-$widget-sub-padding);
+    background-color: $midnight-blue;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;    
+}
+
+.Your-Tickets {
+    @extend %Base-Widget;
+
+    @media (min-width: 768px) {
+        width: $top-header-width-medium;
+    }
+    @media (min-width: 992px) {
+        width: $top-header-width;
+    }
+    @media (min-width: 1200px) {
+        width: $top-header-width-extra-large;
+    }
+
+    &__header {
+        @extend %Base-Widget__header;   
+    }
+
+    &__content {
+        text-align: center;
+        color: #000000;
+
+        &__message {
+            margin-bottom: 20px;
+        }
+
+        &__view-more {
+            text-align: right;
+        }
+
+        &__wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        &__entry {
+            $entry-padding: 10px;
+            padding: $entry-padding;
+            box-shadow: $widget-box-shadow;
+            background-color: $cool-gray;
+            font-weight: 500;
+            width: 100%;
+            margin-right: 10px;
+
+            &__ticket {
+                color: #ffffff;
+            }
+
+            &__amount {
+                color: #afafaf;
+            }
+
+            .ticket-winner {
+                color: $success-color;
+            }
+
+        }
+    }
+}
+
+.Past-Draws {
+    @extend %Base-Widget;
+
+    &__header {
+        @extend %Base-Widget__header;   
+    }
+
+    &__content {
+        &__message {
+            text-align: center;
+            color: #000000;
+        }
+
+        &__view-more {
+            text-align: center;
+        }
+
+        &__wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        &__entry {
+            $entry-padding: 10px;
+            padding: $entry-padding;
+            box-shadow: $widget-box-shadow;
+            background-color: $cool-gray;
+            font-weight: 500;
+            width: 100%;
+            margin-right: 10px;
+
+            &__amount {
+                color: $primary-color;
+            }
+
+            &__date {
+                text-align: center;
+                margin: $entry-padding (-$entry-padding) (-$entry-padding) (-$entry-padding);
+                background: rgba($primary-dark, 0.5);
+                padding: 2px 10px
+            }
+        }
+    }
+    
+}
+.Claim-Prizes {
+    @extend %Widget;
+    background: $success-color;
+
+    @media (min-width: 768px) {
+        width: $top-header-width-medium;
+    }
+    @media (min-width: 992px) {
+        width: $top-header-width;
+    }
+    @media (min-width: 1200px) {
+        width: $top-header-width-extra-large;
+    }
+
+    &__header {
+        font-size: 22px;
+    }
+}
+
+.Home-Header {
+    background: $header-color;
+    text-align: center;
+    box-shadow: $widget-box-shadow;
+    margin-top: -20px;
+
+    &__content {
+        margin: 0 auto;
+        padding: 30px 10px 100px 10px;
+
+        @media (min-width: 992px) {
+            width: $top-header-width;
+        }
+
+        &__title {
+            font-weight: 700;
+            font-size: 36px;
+        }
+        &__description {
+            font-weight: 400;
+            font-size: 16px;
+        }
+    }
+}
+
+.Lottery-Current {
+    @extend %Widget;
+    margin-top: -80px;
+    background: $primary-dark;
+    color: #ffffff;
+    color: $price-summary-color;
+    
+    @media (min-width: 768px) {
+        width: $top-header-width-medium;
+    }
+    @media (min-width: 992px) {
+        width: $top-header-width;
+    }
+    @media (min-width: 1200px) {
+        width: $top-header-width-extra-large;
+    }
+
+    &__wrapper {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+        
+    &__number {
+        position: absolute;
+        top: 5px;
+        right: 10px;
+        color: #dadada;
+        font-weight: 500;
+        font-size: 14px;
+
+        &__hashtag {
+            margin-left: 6px;
+            margin-right: 1px;
+        }
+    }
+
+    &__jackpot {
+        &__amount-header {
+            font-size: 24px;
+            font-weight: 500;
+
+            &__trophy {
+                margin-left: 5px;
+            }
+        }
+        
+        &__amount {
+            margin-top: -10px;
+            font-size: 40px;
+            color: $mint-green;
+            font-weight: 600;
+        }
+    }
+
+    &__ticket-price {    
+        &__description {
+            text-align: center;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        &__amount {
+            text-align: center;
+            background: $cool-gray;
+            font-size: 14px;
+            padding: 3px 8px;
+            font-weight: 500;
+        }
+    }
+
+    &__duration {
+        margin: 20px -30px -30px -30px;
+        padding: 10px 30px;
+        text-align: center;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        
+        &__timestamp {
+            font-size: 16px;
+            margin-bottom: -8px;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+        &__remaining {
+            margin-top: 10px;
+            font-weight: 600;
+            font-size: 22px;
+        }
+    }
+}
+
+
+.time-wrapper {
+    margin-top: -50px;
+    border-radius: 10px;
+    background-color: #f5f1fd;
+    -webkit-box-shadow: 2.505px 17.825px 59px 0px rgb(45 112 196 / 20%);
+    box-shadow: 2.505px 17.825px 59px 0px rgb(45 112 196 / 20%);
+    display: inline-block;
+    padding: 30px 40px;
+    min-width: 600px;
+    text-align: center;
+}
+
+.time-wrapper .time-counter {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
+
+.synth-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 150px);
+}
+
+
+
+.Ticket-Purchase {
+    font-size: 12px;
+
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+
+    &__success-message {
+        font-size:14px;
+        color: $primary-color;
+        font-weight: 500;
+        letter-spacing: 1px;
+    }
+
+    &__input {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+
+        &__value {
+            width: 90px;
+            border: none;
+            padding: 7px 5px;
+        }
+
+        &__label {
+            background: $cool-gray;
+            color: #000000;
+            padding: 7px 10px;
+        }
+    }
+
+    &__contract-description {
+        color: #c1c1c1;
+        position: absolute;
+        top: -31px;
+        right: -4px;
+        font-size: 12px;
+    }
+
+    &__balance-description {
+        color: #c1c1c1;
+        position: absolute;
+        top: -31px;
+        left: 4px;
+        font-size: 12px;
+    }
+
+    &__selected-price {
+
+        &__for {
+            margin-right: 10px;
+        }
+
+        &__amount {
+            font-size: 18px;
+            font-weight: 500;
+        }
+    }
+}
+
+.Ticket-Wrapper {
+    margin: 0px -30px -20px -30px;
+    padding: 10px 30px;
+    background: #334171;
+    text-align: center;
+
+    &__wait-message {
+        text-align: center;
+        font-size: 14px;
+        color: #ffc049;
+        font-weight: 500;
+    }
+    &--logged-in {
+        padding-top: 20px;
+    }
+}
+
+.Past-Draws__content__entry:last-child, .Your-Tickets__content__entry:last-child {
+    margin-right: 0px;
+}
+
+.error-reason {
+    text-align: center;
+    font-size: 12px;
+    margin-top: 10px;
+    margin-bottom: -10px;
+    color: #ffc6c6;
+}
+
+.child-wrapper-price {
+    max-width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.spinner-wrapper {
+    text-align: center;
+}
+
+

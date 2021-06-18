@@ -1,0 +1,194 @@
+<div>
+    <div *ngIf="(loadingState$ | async) === 'success'" [@enterAnimation]>
+        <div class="Home-Header">
+            <div class="container">
+                <div class="Home-Header__content">
+                    <div class="row">
+                        <div class="col">
+                            <div class="Home-Header__content__title">Welcome To ONE Together</div>
+                            <div class="Home-Header__content__description">
+                                Pool together as one to help out the ONE community while also standing a chance to win.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="Lottery-Current">
+                <div class="Lottery-Current__number">
+                    <span>Draw</span>
+                    <span class="Lottery-Current__number__hashtag">
+                        <i class="fas fa-hashtag"></i>
+                    </span>
+                    <span>{{ drawNumber$ | async }}</span>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="Lottery-Current__wrapper">
+                            <div class="Lottery-Current__jackpot">
+                                <div class="Lottery-Current__jackpot__amount-header">
+                                    TOTAL POOL
+                                    <i class="fas fa-trophy Lottery-Current__jackpot__amount-header__trophy"></i>
+                                </div>
+                                <div class="Lottery-Current__jackpot__amount">
+                                    ONE {{ drawPoolFormatted$ | async }}
+                                </div>
+                            </div>
+                            <div class="Lottery-Current__ticket-price">
+                                <div class="Lottery-Current__ticket-price__description">
+                                    Entry Price
+                                </div>
+                                <div class="Lottery-Current__ticket-price__amount">
+                                    ONE {{ticketPriceFormatted$ | async}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="Ticket-Wrapper">
+                            <div *ngIf="!(isDrawExpired$ | async)">
+                                <div>
+                                    <div class="Lottery-Current__duration__timestamp">Draw ends when {{ maxParticipants$ | async }} players have entered</div>
+                                    <div class="Lottery-Current__duration__remaining">
+                                        <i class="fas fa-user-friends"></i>
+                                        {{ currentParticipants$ | async }} / {{ maxParticipants$ | async }} players entered
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="(isDrawExpired$ | async)">
+                                <div class="Lottery-Current__duration__timestamp">Draw has ended with {{ maxParticipants$ | async }} participants</div>
+                                <div class="Lottery-Current__duration__remaining">
+                                    <i class="fas fa-clock"></i>
+                                    Draw Is Being Processed
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="Lottery-Current__duration">
+                            <div class="row" *ngIf="!(isDrawExpired$ | async)">
+                                <div class="col">
+                                    <div>
+                                        <div class="Ticket-Purchase">
+                                            <!-- <div class="Ticket-Purchase__balance-description" *ngIf="userBalanceValue === 0 || userBalanceValue">
+                                                Your Account Balance is ONE {{ formatAmount(userBalanceValue) }}
+                                            </div> -->
+                                            <div *ngIf="!(enteredCurrentDraw$ | async)">
+                                                <button class="Button Button--buy-button" type="button" (click)="purchaseSubmit$.next()">
+                                                    <i class="fas fa-money-bill-wave Button__icon"></i>
+                                                    Enter Pool
+                                                </button>    
+                                            </div>
+                                            <div *ngIf="(enteredCurrentDraw$ | async)">
+                                                <div class="Ticket-Purchase__success-message">You Have Successfully Entered This Draw</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="Ticket-Wrapper__wait-message" *ngIf="(isDrawExpired$ | async)">
+                                Please wait till the current draw is finished processing to purchase your ticket.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="Claim-Prizes" *ngIf="hasWinnings$ | async">
+                <div class="row">
+                    <div class="col">
+                        <div class="Claim-Prizes__header">
+                            <i class="fas fa-trophy Lottery-Current__jackpot__amount-header__trophy"></i>
+                            You Are A Winner
+                        </div>
+                        <div class="Claim-Prizes__description">
+                            You have unclaimed prizes, click on claim to collect your prize
+                        </div>
+                    </div>
+                    <div class="Claim-Prizes__claim-button">
+                        <button class="Button Button--claim" routerLink="/tickets">
+                            Claim Prize
+                        </button>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="Your-Tickets">
+                        <div class="Your-Tickets__header">
+                            Your Tickets
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="Your-Tickets__content">
+                                    <ng-container *ngIf="(userTicketsLoadingState$ | async) === 'pending'">
+                                        <div class="spinner-border text-dark" role="status" style="width: 3rem; height: 3rem; z-index: 20;">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </ng-container>
+                                    <ng-container *ngIf="(userTicketsLoadingState$ | async) === 'success'">
+                                        <ng-container *ngIf="(userTickets$ | async); let userTickets">
+                                            <ng-container *ngIf="userTickets.length == 0">
+                                                <div class="Your-Tickets__content__message">
+                                                    <ng-container *ngIf="(accountAddress$ | async)">
+                                                        You Don’t Own Any Tickets Currently
+                                                    </ng-container>
+                                                    <ng-container *ngIf="!(accountAddress$ | async)">
+                                                        Login To See Your Tickets
+                                                    </ng-container>
+                                                </div>
+                                            </ng-container>
+                                            <ng-container>
+                                                <div class="Your-Tickets__content__choices">
+                                                    <div class="Your-Tickets__content__wrapper">
+                                                        <div *ngFor="let ticket of userTickets"
+                                                            class="Your-Tickets__content__entry">
+                                                            <div class="Your-Tickets__content__entry__ticket">
+                                                                Ticket #{{ ticket.ticketId }} 
+                                                            </div>
+                                                            <div class="Your-Tickets__content__entry__amount"
+                                                                 [ngClass]="{ 'ticket-winner': ticket.winnings != '0' }">
+                                                                 ONE {{ formatAmountFromWei(ticket.winnings) }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <button class="Button Button--secondary Button--secondary-white"
+                                                            *ngIf="(accountAddress$ | async) && userTickets.length > 0"
+                                                            routerLink="/tickets">
+                                                        Claim / View All
+                                                    </button>
+                                                </div>
+                                            </ng-container>
+                                        </ng-container>
+                                    </ng-container>
+                                    <ng-container *ngIf="(userTicketsLoadingState$ | async) === 'error'">
+                                        <div class="error-loading">
+                                            We were unable to load your tickets
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="(loadingState$ | async) === 'pending'">
+        <div class="synth-spinner">
+            <div class="spinner-border text-dark" role="status" style="width: 3rem; height: 3rem; z-index: 20;">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="(loadingState$ | async) === 'error'">
+        <div class="error-loading synth-spinner">
+            We were unable to load the lottery at this time. Please try again later.    
+        </div>
+    </div>
+</div>

@@ -1,0 +1,47 @@
+<div *ngIf="submitLoader$ | async; let submitStatus">
+    <div class="approve-header">
+        Lottery Token Transfer
+    </div>
+    <div *ngIf="submitStatus === 'idle' || submitStatus === 'error'">
+        <form (ngSubmit)="transfer()" [formGroup]="transferForm">
+            <div *ngIf="submitStatus === 'idle'">
+                <p>
+                    Please enter the address you wish to transfer Ticket Id #{{ ticketId }} to
+                </p>
+                <p class="warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Make sure the address is correct, as trasnfers to incorrect addresses will get lost permanenlty.
+                </p>
+            </div>
+            <div *ngIf="submitStatus === 'error'">
+                <p>There was an unexpected error when trying to approve our app to use our funds, please refresh and try again.</p>
+            </div>
+            <div class="form-entry">
+                <div>
+                    Target Address
+                </div>
+                <input type="text" class="target-address" formControlName="targetAddress">
+                <div *ngIf="(transferForm.controls.targetAddress.touched)" class="error-reason">
+                    <ng-container *ngIf="transferForm.controls.targetAddress.errors?.required || transferForm.controls.targetAddress.errors?.addressNotValid">
+                        Please enter a valid address
+                    </ng-container>
+                </div>
+                <div>
+                    <button type="submit" class="Button Button--primary button-approve">Transfer</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div *ngIf="submitStatus === 'pending'">
+        <div class="synth-spinner">
+            <div class="spinner-border text-dark" role="status" style="width: 3rem; height: 3rem; z-index: 20;">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="submitStatus === 'success'">
+        <div class="synth-spinner">
+            <span>Successfully Transferred Ticket #{{ ticketId }}</span>
+        </div>
+    </div>
+</div>

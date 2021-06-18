@@ -1,0 +1,28 @@
+<nav class="navbar ustify-content-between">
+  <div class="container">
+    <a class="" routerLink="/">
+      <img src="../assets/logo.png" height="24"class="logo-picture" alt="">
+    </a>
+    <div class="form-inline">
+      <ng-container *ngIf="(accountAddress$ | async) as accountAddress; else signInButton">
+        <div class="dropdown">
+          <button class="Account-Address" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="dropdownMenuButton">
+            <span class="Account-Address__text">{{ accountAddress }}</span>
+            <i class="fas fa-chevron-down Account-Address__dropdown-icon"></i>
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" (click)="startDraw$.next()">Start Draw</a>
+            <a class="dropdown-item" (click)="logout()">Logout</a>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #signInButton>
+        <button class="Account-Address" (click)="signIn()">
+          <span class="Account-Address__sign-in-text">Sign In</span>
+        </button>
+      </ng-template>
+    </div>
+  </div>
+</nav>
+
+<router-outlet></router-outlet>

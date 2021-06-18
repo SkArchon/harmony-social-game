@@ -1,0 +1,65 @@
+@import '../../variables.scss';
+
+.purchase {
+    font-size: 30px;
+    color: white;
+    font-weight: 600;
+    margin-top: 20px;
+    margin-left: 2px;
+}
+
+.navbar {
+    background: $header-color;
+    margin-bottom: 20px;
+}
+
+.navbar-nav > li > a 
+{
+    padding: 0;
+    margin: 0;
+    vertical-align: bottom;
+}
+
+.header-name {
+    font-weight: 900;
+    margin-left: 20px;
+    font-size: 25px;
+    letter-spacing: 1px;
+}
+
+.navbar-header{
+    left: 50%;
+    position: relative;
+    transform: translateX(-50%);
+ }
+
+ 
+.nav-item {
+    font-weight: 400;
+    color: #cae5ea;
+}
+
+.logo-picture {
+    height: 30px;
+}
+
+.Account-Address {
+    background: $header-color-light-20;
+    padding: 2px 6px;
+    font-weight: 500;
+    border: none;
+    color: #ffffff;
+
+    // &__text {
+    //     color: $primary-color-light-20;
+    // }
+    &__sign-in-text {
+        //color: $primary-color-light-20;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    &__dropdown-icon {
+        margin-left: 5px;
+    }
+}
+
