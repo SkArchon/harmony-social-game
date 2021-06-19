@@ -39,7 +39,7 @@ contract Pool is PoolTicket {
 
   event LotteryDraw(uint256 indexed drawNumber, uint256 drawTotal, uint256 drawTimestamp);
 
-  constructor() {    
+  constructor(address _daoAddress) {    
     winningPercentages.push(60);
     winningPercentages.push(40);
     // winningPercentages.push(20);
@@ -55,8 +55,7 @@ contract Pool is PoolTicket {
 
     startTokenId = _getLastTicketPurchased() + 1;
 
-    // temporarily for testing
-    daoAddress = address(this);
+    daoAddress = _daoAddress;
   } 
 
   function getDetails(address userAddress) external view returns (
@@ -132,9 +131,10 @@ contract Pool is PoolTicket {
       // We add any remaining amounts that would have been left
       if(index == dao_address_index) {
         winningAmount += remainingContractPool;
-        // TODO : transfer to dao address?
-        allocateWinnings(0, winningAmount);
+        payable(daoAddress).transfer(winningAmount);
         return;
+        // TODO : transfer to dao address?
+        // allocateWinnings(0, winningAmount);
       }
       uint256 winningToken = getWinningToken(lastTicketIdPurchased, rand, participantsCount);
       _winningTokens[winningToken] = true;

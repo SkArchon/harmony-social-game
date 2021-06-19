@@ -15,7 +15,7 @@ async function main() {
 
   // We get the contract to deploy
   const Pool = await hre.ethers.getContractFactory("Pool");
-  const pool = await Pool.deploy();
+  const pool = await Pool.deploy("0x2758e3bB32BcB882e9dfa5A23CAb10f137C4c218");
 
   await pool.deployed();
 
