@@ -31,7 +31,7 @@
                                     TOTAL POOL
                                     <i class="fas fa-trophy Lottery-Current__jackpot__amount-header__trophy"></i>
                                 </div>
-                                <div class="Lottery-Current__jackpot__amount">
+                                <div class="Lottery-Current__jackpot__amount {{getPriceFormatterClass(drawPoolFormatted$ | async)}}">
                                     ONE {{ drawPoolFormatted$ | async }}
                                 </div>
                             </div>

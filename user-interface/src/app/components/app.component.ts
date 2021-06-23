@@ -51,7 +51,16 @@ export class AppComponent implements OnDestroy {
   }
 
   public signIn(): any {
-    this.contractService.connectWallet();
+    this.contractService.connectWallet().subscribe(_ => {
+        this.snackBar.open('Successfully logged in.', 'Close');
+      }, _error => {
+        const message = ((window as any).onewallet)
+          ? 'We were unable to login, please refresh and try again.'
+          : 'We could not detect one wallet in your browser, please make sure One Wallet is installed';
+        this.snackBar.open(message, 'Close', {
+          panelClass: ['failure-snackbar']
+        });
+      });
   }
 
   public logout(): any {

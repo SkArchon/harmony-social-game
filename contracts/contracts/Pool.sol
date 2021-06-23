@@ -2,6 +2,7 @@
 pragma solidity 0.8.1;
 
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "hardhat/console.sol";
 
 import "./PoolTicket.sol";
 
@@ -11,8 +12,9 @@ import "./PoolTicket.sol";
 contract Pool is PoolTicket {
   using Counters for Counters.Counter;
 
-  uint16  private constant maxWinningPercentages = 20;
-  uint8   private constant dao_address_index = 0;
+  uint32  private constant MaxSettableParticipants = 100000000;
+  uint16  private constant MaxWinningPercentages = 20;
+  uint8   private constant DaoAddressIndex = 0;
 
   uint256 private ticketPurchaseCurrentZeroIndex = 0;
   uint256 private startTokenId;
@@ -21,34 +23,33 @@ contract Pool is PoolTicket {
   uint64  private participantsForRound;
   uint8[] private winningPercentages;
 
+  // After a draw has started we cannot modify them, therefore
+  // instead we use next variables to set any new values for the next draw
   uint64  private nextParticipantsForRound;
   uint8[] private nextWinningPercentages;
 
-  uint256 currentParticipantCount = 0;
-
-  // We set a variable for lottery processing because
-  // block.timestmap's accuracy cannot be relied upon
-  // And we dont want a user to purchase a ticket during
-  // the processing going on
-
+  uint256 private currentParticipantCount = 0;
+  
   Counters.Counter private drawNumberTracker;
 
-  address daoAddress;
+  address private daoAddress;
 
   mapping (uint256 => bool) public _winningTokens;
 
   event LotteryDraw(uint256 indexed drawNumber, uint256 drawTotal, uint256 drawTimestamp);
 
-  constructor(address _daoAddress) {    
-    winningPercentages.push(60);
-    winningPercentages.push(40);
-    // winningPercentages.push(20);
-    // winningPercentages.push(15);
-    nextWinningPercentages = winningPercentages;
+  constructor(address _daoAddress,
+              uint64 _participantCount, 
+              uint8[] memory _winningPercentages,
+              uint32 _ticketPrice) 
+      PoolTicket(_ticketPrice)
+      {
+    // Pass them through the functions to have them validated
+    setNextParticipantsForRound(_participantCount);   
+    participantsForRound = nextParticipantsForRound;
 
-    uint64 _participantsForRound = 2;
-    participantsForRound = _participantsForRound;
-    nextParticipantsForRound = _participantsForRound;
+    setWinningPercentages(_winningPercentages);   
+    winningPercentages = nextWinningPercentages;
 
     // We dont want draw 0 to exist
     drawNumberTracker.increment();
@@ -106,7 +107,6 @@ contract Pool is PoolTicket {
       ? winningPercentages.length
       : participantsCount;
 
-    // We reverse iterate because we want to add any remaining values to the winner
     for (uint256 _i = iterationLength; _i > 0; _i--) {
       uint256 index = _i - 1; // In order to not trigger underflow validations we do not do arrLength - 1
       uint256 winningPercentage = winningPercentages[index];
@@ -129,12 +129,10 @@ contract Pool is PoolTicket {
                                         uint256 rand,
                                         uint256 participantsCount) private {
       // We add any remaining amounts that would have been left
-      if(index == dao_address_index) {
+      if(index == DaoAddressIndex) {
         winningAmount += remainingContractPool;
         payable(daoAddress).transfer(winningAmount);
         return;
-        // TODO : transfer to dao address?
-        // allocateWinnings(0, winningAmount);
       }
       uint256 winningToken = getWinningToken(lastTicketIdPurchased, rand, participantsCount);
       _winningTokens[winningToken] = true;
@@ -155,7 +153,7 @@ contract Pool is PoolTicket {
         And instead opt to go to the next token.
 
         (Note that the Map acesses are O(1) so it wont have a huge cost, except for storage. Where there would be maximum, 20 more
-        entries per draw, if we assume a week. that would be (20 * 53) new entries per year)
+        entries per draw)
         */
       do {
         winningToken = winningBase + incrementer;
@@ -185,7 +183,6 @@ contract Pool is PoolTicket {
 
   /**
     Calculate the balance based on the percentage
-    (Note that solidity will omit the floating point amount)
   */
   function calculatePercentage(uint amount, uint percentage) private pure returns (uint256){
       return amount * percentage / 100;
@@ -231,21 +228,22 @@ contract Pool is PoolTicket {
   // Administration Setters
   //=====================================
 
-  function setWinningPercentages(uint8[] memory percentageDistribution) external onlyOwner {
+  function setWinningPercentages(uint8[] memory percentageDistribution) public onlyOwner {
     // We need two because (the first index is for the dao entry)
-    bool withinMaxRange = percentageDistribution.length > 2 && percentageDistribution.length <= maxWinningPercentages;
-    bool withinParticipantCountRange = percentageDistribution.length < nextParticipantsForRound;
+    bool withinMaxRange = percentageDistribution.length >= 2 && percentageDistribution.length <= MaxWinningPercentages;
+    bool withinParticipantCountRange = percentageDistribution.length <= nextParticipantsForRound;
     
-    require(!withinMaxRange, "There cannot be more than the max distributions or");
-    require(!!withinParticipantCountRange, "There must be atleast a buffer of 1 (more than) the participants count");
+    require(withinMaxRange, "There cannot be less than 2 entries and more than the max allowed entries");
+    require(withinParticipantCountRange, "There must be atleast an equal percentage distribution to the participants count");
     
     uint8 currentTotal = 0;
     uint8 lastPercentage = 0;
 
     for (uint8 i = uint8(percentageDistribution.length); i > 0; i--) {
-      uint8 currentPercentage = percentageDistribution[(i - 1)];
+      uint8 index = i - 1;
+      uint8 currentPercentage = percentageDistribution[index];
       // We allow lower percentages for the dao
-      if(i != dao_address_index) {
+      if(index != DaoAddressIndex) {
         require (currentPercentage > 0 && currentPercentage <= 100, "Invalid percentage passed");
         require (currentPercentage >= lastPercentage, "The array percentages must be in descending order");
       }
@@ -256,12 +254,13 @@ contract Pool is PoolTicket {
     // Technically there can be an amount leftover for the contract owner
     // However the requirement was interpreted as no fees / etc are taken
     require (currentTotal == 100, "The percentage did not add up to 100");
-    winningPercentages = percentageDistribution;    
+    nextWinningPercentages = percentageDistribution;    
   }
 
-  function setNextParticipantsForRound(uint64 nextParticipantsCount) external onlyOwner {
+  function setNextParticipantsForRound(uint64 nextParticipantsCount) public onlyOwner {
     // This is to prevent any accidental draws running for years
-    require(nextParticipantsCount > nextWinningPercentages.length, "The winning percentage count must be exceeded");
+    require(nextParticipantsCount <= MaxSettableParticipants, "The max participant count cannot be exceeded");
+    require(nextParticipantsCount >= nextWinningPercentages.length, "The participants must be more than or equal to the winning percentages");
     nextParticipantsForRound = nextParticipantsCount;
   }
 

@@ -19,40 +19,42 @@ describe("Transactions", function () {
   });
 });
 
-describe("Pool", function() {
+describe("SetWinningPercentages", function() {
 
   it("Should return the new greeting once it's changed", async function() {
     const [owner, addr1, addr2] = await ethers.getSigners();
 
     const Pool = await ethers.getContractFactory("Pool");
-    const pool = await Pool.deploy(addr2.address);
+    const args = { 
+      gasLimit: 250000,
+      gasPrice: 8000000000
+    };
+
+    console.log("E");
+    const pool = await Pool.deploy(addr2.address, 3, [50, 40, 10], 28);
+    console.log("E");
     await pool.deployed();
 
-    var tx = await pool.buyTicket(1, { value: "20000000000000000000"});
-    await tx.wait();
+    // const value = 18;
+    // var tx = await pool.connect(owner).setNextParticipantsForRound(value);
+    // await tx.wait();
 
-    console.log("AA");
-
-    var tx = await pool.connect(addr1).buyTicket(1, { value: "20000000000000000000"});
-    await tx.wait();
+    // const percentageDistribution = [30, 50, 10, 10];
+    // var tx = await pool.connect(owner).setWinningPercentages(percentageDistribution);
+    // await tx.wait();
     
+    const results = await pool.getWinningPercentages();
+    console.log(results.winningList);
+    console.log(results.participants.toString());
+    console.log(results.ticketPrice.toString());
 
     // var tx = await pool.buyTicket(1, { value: "20000000000000000000"});
     // await tx.wait();
 
-    console.log("EE");
 
-
-    const results = await pool.getDetails(addr1.address);
-    console.log(results.currentParticipants.toString());
-    console.log(results.amount.toString());
-    // expect(await pool.getDetails()).to.equal("Hello, world!");
-
-    // const setGreetingTx = await greeter.setGreeting("Hola, mundo!");
+    // var tx = await pool.connect(addr1).buyTicket(1, { value: "20000000000000000000"});
+    // await tx.wait();
     
-    // // wait until the transaction is mined
-    // await setGreetingTx.wait();
-
-    // expect(await greeter.greet()).to.equal("Hola, mundo!");
+    // const results = await pool.setWinningPercentages(addr1.address);
   });
 });

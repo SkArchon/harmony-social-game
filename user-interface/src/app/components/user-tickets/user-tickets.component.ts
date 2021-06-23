@@ -46,6 +46,7 @@ export class UserTicketsComponent implements OnDestroy {
 
     this.loadingState$ = this.store.select(userTicketSelectors.getLoadingState);
     this.tickets$ = this.store.select(userTicketSelectors.getTickets);
+
     this.userAddress$ = this.store.select(usersSelectors.getAccountAddress);
 
     this.setupClaimFunds();

@@ -1,6 +1,6 @@
 <div *ngIf="submitLoader$ | async; let submitStatus">
     <div class="approve-header">
-        Lottery Token Transfer
+        Ticket Transfer
     </div>
     <div *ngIf="submitStatus === 'idle' || submitStatus === 'error'">
         <form (ngSubmit)="transfer()" [formGroup]="transferForm">
@@ -10,7 +10,7 @@
                 </p>
                 <p class="warning">
                     <i class="fas fa-exclamation-triangle"></i>
-                    Make sure the address is correct, as trasnfers to incorrect addresses will get lost permanenlty.
+                    Make sure the address is correct, as transfers to incorrect addresses will get lost permanently.
                 </p>
             </div>
             <div *ngIf="submitStatus === 'error'">

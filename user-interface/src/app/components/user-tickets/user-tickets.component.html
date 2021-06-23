@@ -5,8 +5,23 @@
           <ng-container *ngIf="(tickets$ | async); let tickets">
             <ng-container *ngIf="tickets.length > 0">
               <div class="row">
-                <div class="card-columns">
-                  <ng-container *ngFor="let ticket of tickets">
+                <div class="col">
+                  <div class="tickets-description">
+                    <div class="tickets-description__main-description">
+                      Tickets For Account <span class="tickets-description__account-address">{{ userAddress$ | async }}</span>
+                    </div>
+                    <div>
+                      To claim, pick a winning ticket with a green ribbon and click "Claim".
+                    </div>
+                    <div>
+                      To transfer tickets between accounts, click "Transfer".
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <ng-container *ngFor="let ticket of tickets">
+                  <div class="col">
                     <div class="card">
                       <ng-container *ngIf="ticket.winnings != '0'">
                         <div class="ribbon-wrapper">
@@ -26,8 +41,8 @@
                         </button>
                       </div>
                     </div>
-                  </ng-container>
-                </div>
+                  </div>
+                </ng-container>
               </div>
             </ng-container>
             <ng-container *ngIf="tickets.length === 0">

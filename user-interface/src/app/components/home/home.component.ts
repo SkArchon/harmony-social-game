@@ -180,7 +180,6 @@ export class HomeComponent implements OnDestroy {
               : of(result);
           }),
           tap((_success: any) => {
-            console.log(`https://explorer.testnet.harmony.one/#/tx/${_success.transaction.id}`);
             setTimeout(() => {
               this.snackBar.open(`Ticket Was Successfully Purchased`, 'Close');
               this.store.dispatch(lotteryLoadData());
@@ -215,6 +214,16 @@ export class HomeComponent implements OnDestroy {
 
   public formatAmount(value): string {
     return CommonUtil.formatAmount(value);
+  }
+
+  public getPriceFormatterClass(ticketPrice) {
+    if (!ticketPrice) { return ''; }
+
+    const ticketPriceTotalLength = ticketPrice.toString().length;
+    if (ticketPriceTotalLength > 6) {
+      return 'ticket-price-small';
+    }
+    return '';
   }
 
   public formatAmountFromWei(value): string {

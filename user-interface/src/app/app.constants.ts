@@ -1,3 +1,4 @@
-export const CONTRACT_ADDRESS = '0xE6CDa6bAbA3e973d616615DFc12BA18F58639fA0';
+export const CONTRACT_ADDRESS = '0x84567Da205cDD993E74502bF9b387cD0d4531272';
+export const HARMONY_URL = 'https://api.s0.b.hmny.io';
 
 

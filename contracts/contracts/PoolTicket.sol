@@ -18,6 +18,7 @@ contract PoolTicket is Ownable, ERC721Enumerable {
   // 18 Decimals
   string private constant nftSymbol = "HMT";
   string private constant nftName = "HM1 Pool Ticket";
+  uint32 private constant MaxTicketPrice = 1000000;
 
   // We do not want to change the price of the ticket price in the draw
   // after it has already started as this would give a positive or negative advantage
@@ -26,7 +27,7 @@ contract PoolTicket is Ownable, ERC721Enumerable {
   // the ticket price is made to ONE 20, the user with the 20 usd bought a ticket at
   // an advantage)
   uint256 private ticketPrice;
-  uint256 nextTicketPrice;
+  uint256 private nextTicketPrice;
 
   Counters.Counter private tokenIdTracker;
   uint256 private lockedContractPoolAmount = 0;
@@ -34,9 +35,9 @@ contract PoolTicket is Ownable, ERC721Enumerable {
   mapping(uint256 => uint256) private _winningAmounts;
   mapping(address => uint256) private accountLastPurchasedDrawMapping;
 
-  constructor() ERC721(nftName, nftSymbol) {
-      ticketPrice = 20 * 10 ** 18;
-      nextTicketPrice = ticketPrice;
+  constructor(uint32 _ticketPrice) ERC721(nftName, nftSymbol) {
+      setNextDrawTicketPrice(_ticketPrice);
+      ticketPrice = nextTicketPrice;
       tokenIdTracker.increment();
   }
 
@@ -137,8 +138,12 @@ contract PoolTicket is Ownable, ERC721Enumerable {
   // Administration Setters
   //=====================================
 
-  function setNextDrawTicketPrice(uint256 newTicketPrice) external onlyOwner {
-      nextTicketPrice = newTicketPrice;
+  /**
+    The function is written this way so decimals e.g. (10.50) wont be allowed.
+   */
+  function setNextDrawTicketPrice(uint32 newTicketPrice) public onlyOwner {
+      require(newTicketPrice >= 1 && newTicketPrice <= MaxTicketPrice, "The price must be beween 1 and the max ticket price");
+      nextTicketPrice = uint256(newTicketPrice) * (10 ** 18);
   }
 
 }
